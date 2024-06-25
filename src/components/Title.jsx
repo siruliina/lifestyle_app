@@ -1,7 +1,9 @@
+import '../css/Title.css';
+
 const Title = () => {
     return (
         <h1>
-            Lifestyle App
+            LIFESTYLE APP
         </h1>
     )
 }

@@ -1,6 +1,6 @@
 nav {
-    background-color: #f3b8b8;
-    padding: 1rem;
+    background-color: #243d26;
+    padding: 0.1rem;
 }
 
 nav ul {
@@ -14,9 +14,9 @@ nav ul li {
 }
 
 nav ul li a {
-    color: black;
+    color: white;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
     }
 
 nav ul li a:hover {
