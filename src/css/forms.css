@@ -1,11 +1,19 @@
 /* General */
 label {
-    margin-bottom: 5px;
     width: 100%;
 }
 
 input {
+    margin-top: 5px;
     width: 100%;
+    border-radius: var(--border-radius);
+    padding: 5px;
+    border: 1px solid grey;
+}
+
+input:focus {
+    outline: none;
+    border-color: blue;
 }
 
 /* Form layout */
@@ -13,4 +21,17 @@ input {
     display: flex;
     flex-direction: column;
     gap: var(--flex-gap);
+}
+
+/* Messages */
+.error-message {
+    margin-top: 5px;
+    color: var(--error-color);
+    font-size: 14px;
+}
+
+.success-message {
+    margin-top: 5px;
+    color: var(--success-color);
+    font-size: 14px;
 }

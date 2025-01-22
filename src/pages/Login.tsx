@@ -31,7 +31,7 @@ const Login = () => {
                         id="username"
                         style={
                             errors.username
-                                ? { border: "1px solid red" }
+                                ? { border: "1px solid var(--error-color)" }
                                 : undefined
                         }
                         {...register("username", {
@@ -39,7 +39,7 @@ const Login = () => {
                         })}
                     />
                     {errors.username && (
-                        <p className="errorMessage">
+                        <p className="error-message">
                             {errors.username.message}
                         </p>
                     )}
@@ -52,7 +52,7 @@ const Login = () => {
                         id="password"
                         style={
                             errors.password
-                                ? { border: "1px solid red" }
+                                ? { border: "1px solid var(--error-color)" }
                                 : undefined
                         }
                         {...register("password", {
@@ -60,7 +60,7 @@ const Login = () => {
                         })}
                     />
                     {errors.password && (
-                        <p className="errorMessage">
+                        <p className="error-message">
                             {errors.password.message}
                         </p>
                     )}

@@ -13,6 +13,7 @@ const SignUp = () => {
         register,
         formState: { errors },
         handleSubmit,
+        getValues,
     } = useForm<SignUpFormData>({
         mode: "onChange",
     });
@@ -33,7 +34,7 @@ const SignUp = () => {
                         id="username"
                         style={
                             errors.username
-                                ? { border: "1px solid red" }
+                                ? { border: "1px solid var(--error-color)" }
                                 : undefined
                         }
                         {...register("username", {
@@ -41,7 +42,7 @@ const SignUp = () => {
                         })}
                     />
                     {errors.username && (
-                        <p className="errorMessage">
+                        <p className="error-message">
                             {errors.username.message}
                         </p>
                     )}
@@ -54,7 +55,7 @@ const SignUp = () => {
                         id="email"
                         style={
                             errors.email
-                                ? { border: "1px solid red" }
+                                ? { border: "1px solid var(--error-color)" }
                                 : undefined
                         }
                         {...register("email", {
@@ -62,7 +63,7 @@ const SignUp = () => {
                         })}
                     />
                     {errors.email && (
-                        <p className="errorMessage">{errors.email.message}</p>
+                        <p className="error-message">{errors.email.message}</p>
                     )}
                 </div>
 
@@ -73,7 +74,7 @@ const SignUp = () => {
                         id="password"
                         style={
                             errors.password
-                                ? { border: "1px solid red" }
+                                ? { border: "1px solid var(--error-color)" }
                                 : undefined
                         }
                         {...register("password", {
@@ -81,7 +82,7 @@ const SignUp = () => {
                         })}
                     />
                     {errors.password && (
-                        <p className="errorMessage">
+                        <p className="error-message">
                             {errors.password.message}
                         </p>
                     )}
@@ -94,15 +95,24 @@ const SignUp = () => {
                         id="confirmPassword"
                         style={
                             errors.confirmPassword
-                                ? { border: "1px solid red" }
+                                ? { border: "1px solid var(--error-color)" }
                                 : undefined
                         }
                         {...register("confirmPassword", {
                             required: "Please, confirm your password.",
+                            validate: {
+                                match: (v) => {
+                                    const { password } = getValues();
+                                    return (
+                                        v === password ||
+                                        "The passwords don't match. Check again."
+                                    );
+                                },
+                            },
                         })}
                     />
                     {errors.confirmPassword && (
-                        <p className="errorMessage">
+                        <p className="error-message">
                             {errors.confirmPassword.message}
                         </p>
                     )}

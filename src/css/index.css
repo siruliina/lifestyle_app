@@ -8,4 +8,12 @@
 
 :root {
     --flex-gap: 10px;
+    --border-radius: 5px;
+    --error-color: red;
+    --success-color: green;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    height: 100vh;
 }
