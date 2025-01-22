@@ -1,0 +1,16 @@
+/* General */
+label {
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+input {
+    width: 100%;
+}
+
+/* Form layout */
+.form-flex {
+    display: flex;
+    flex-direction: column;
+    gap: var(--flex-gap);
+}

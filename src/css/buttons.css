@@ -1,0 +1,11 @@
+button {
+    padding: 5px;
+    max-width: 100px;
+    width: 100%;
+}
+/* Button positioning */
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: var(--flex-gap);
+}
