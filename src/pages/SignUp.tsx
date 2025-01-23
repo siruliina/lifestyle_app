@@ -1,5 +1,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { baseUrl } from "../utils/baseUrl";
+import { useState } from "react";
 
 interface SignUpFormData {
     username: string;
@@ -18,9 +21,32 @@ const SignUp = () => {
         mode: "onChange",
     });
     const navigate = useNavigate();
+    const [message, setMessage] = useState({ text: "", error: false });
 
     const handleSignUp: SubmitHandler<SignUpFormData> = (data) => {
-        console.log(data);
+        const userToCreate = {
+            username: data.username,
+            email: data.email,
+            password: data.password,
+        };
+
+        axios
+            .post(`${baseUrl}/users/register/`, userToCreate)
+            .then((response) => {
+                console.log(response.data);
+                setMessage({
+                    text: "User created successfully. Redirecting to login page in 3 seconds.",
+                    error: false,
+                });
+                setTimeout(() => {
+                    navigate("/login");
+                    setMessage({ text: "", error: false });
+                }, 3000);
+            })
+            .catch((error) => {
+                console.error(error.response);
+                setMessage({ text: "Signup failed. Try again.", error: true });
+            });
     };
 
     return (
@@ -60,6 +86,10 @@ const SignUp = () => {
                         }
                         {...register("email", {
                             required: "Please, type your email.",
+                            pattern: {
+                                value: /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim,
+                                message: "Please, enter a valid email.",
+                            },
                         })}
                     />
                     {errors.email && (
@@ -117,6 +147,16 @@ const SignUp = () => {
                         </p>
                     )}
                 </div>
+
+                {message.text.length > 0 ? (
+                    <p
+                        className={
+                            message.error ? "error-message" : "success-message"
+                        }
+                    >
+                        {message.text}
+                    </p>
+                ) : null}
 
                 <div className="buttons">
                     <button type="button" onClick={() => navigate("/login")}>
