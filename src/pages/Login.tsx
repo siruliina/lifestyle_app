@@ -1,5 +1,8 @@
+import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../utils/baseUrl";
+import { useState } from "react";
 
 interface LoginFormData {
     username: string;
@@ -15,9 +18,38 @@ const Login = () => {
         mode: "onChange",
     });
     const navigate = useNavigate();
+    const [message, setMessage] = useState("");
 
     const handleLogin: SubmitHandler<LoginFormData> = (data) => {
-        console.log(data);
+        const userToLogin = {
+            username: data.username,
+            password: data.password,
+        };
+
+        axios
+            .post(`${baseUrl}/users/login/`, userToLogin, {
+                withCredentials: true,
+            })
+            .then((response) => {
+                console.log(response.data);
+                // navigate("/")
+            })
+            .catch((error) => {
+                console.error(error.response);
+
+                const accountError = error.response?.data?.detail;
+
+                if (
+                    accountError &&
+                    accountError.includes(
+                        "No active account found with the given credentials"
+                    )
+                ) {
+                    setMessage(
+                        "No active account found with the given credentials."
+                    );
+                }
+            });
     };
 
     return (
@@ -65,6 +97,10 @@ const Login = () => {
                         </p>
                     )}
                 </div>
+
+                {message.length > 0 ? (
+                    <p className="error-message">{message}</p>
+                ) : null}
 
                 <div className="buttons">
                     <button type="button" onClick={() => navigate("/sign-up")}>
