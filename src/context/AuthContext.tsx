@@ -42,10 +42,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 try {
                     setAuth({
                         userId: response.data.user_id,
-                        accessToken: response.data.access_token,
+                        accessToken: response.data.access,
                         isAuthenticated: true,
                     });
-                    console.log(response.data);
                 } catch (error) {
                     console.error(error);
                 } finally {
@@ -76,6 +75,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 setLoading(false);
             });
     }, []);
+
+    useEffect(() => {
+        console.log(auth);
+    }, [auth]);
 
     return (
         <AuthContext.Provider value={{ auth, setAuth, loading, setLoading }}>
