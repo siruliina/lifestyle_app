@@ -4,15 +4,20 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import Missing from "./pages/Missing";
+import NavBar from "./components/NavBar";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="*" element={<Missing />} />
-            </Routes>
+            <AuthProvider>
+                <NavBar />
+                <Routes>
+                    <Route path="/sign-up" element={<SignUp />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="*" element={<Missing />} />
+                </Routes>
+            </AuthProvider>
         </BrowserRouter>
     );
 }

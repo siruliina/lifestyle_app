@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../utils/baseUrl";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth";
 
 interface LoginFormData {
     username: string;
@@ -19,6 +20,7 @@ const Login = () => {
     });
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
+    const { setAuth, setLoading } = useAuth();
 
     const handleLogin: SubmitHandler<LoginFormData> = (data) => {
         const userToLogin = {
@@ -32,6 +34,20 @@ const Login = () => {
             })
             .then((response) => {
                 console.log(response.data);
+
+                try {
+                    setAuth({
+                        userId: response.data.user_id,
+                        accessToken: response.data.access_token,
+                        isAuthenticated: true,
+                    });
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    setLoading(false);
+                }
+            })
+            .then(() => {
                 // navigate("/")
             })
             .catch((error) => {
