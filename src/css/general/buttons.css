@@ -2,10 +2,35 @@ button {
     padding: 5px;
     max-width: 100px;
     width: 100%;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    font-weight: var(--thick-font);
+    transition: background-color 0.5s;
 }
+
+.pink-button {
+    background-color: var(--pink);
+    color: white;
+}
+
+.pink-button:hover {
+    background-color: #bd6086;
+}
+
+.green-button {
+    background-color: var(--dark-green);
+    color: white;
+}
+
+.green-button:hover {
+    background-color: #3e5a3e;
+}
+
 /* Button positioning */
 .buttons {
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;
     gap: var(--flex-gap);
+    justify-content: flex-end;
 }

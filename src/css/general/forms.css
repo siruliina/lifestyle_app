@@ -7,6 +7,8 @@ input,
 textarea {
     margin-top: 5px;
     width: 100%;
+    max-width: 100%;
+    min-width: 100%;
     border-radius: var(--border-radius);
     padding: 5px;
     border: 1px solid grey;
@@ -22,6 +24,11 @@ input:focus {
     display: flex;
     flex-direction: column;
     gap: var(--flex-gap);
+}
+
+.form-flex div {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Messages */

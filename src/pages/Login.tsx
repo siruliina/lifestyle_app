@@ -113,10 +113,16 @@ const Login = () => {
                 ) : null}
 
                 <div className="buttons">
-                    <button type="button" onClick={() => navigate("/sign-up")}>
+                    <button
+                        type="button"
+                        onClick={() => navigate("/sign-up")}
+                        className="pink-button"
+                    >
                         Sign Up
                     </button>
-                    <button type="submit">Login</button>
+                    <button type="submit" className="green-button">
+                        Login
+                    </button>
                 </div>
             </form>
         </div>

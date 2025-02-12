@@ -9,11 +9,29 @@
 :root {
     --flex-gap: 10px;
     --border-radius: 5px;
+    --thick-font: 600;
+
     --error-color: red;
     --success-color: green;
+    --pink: #db6b97;
+    --cream: #faf3e0;
+    --lightest-green: #f2ffe9;
+    --light-green: #a6cf98;
+    --dark-green: #557c55;
 }
 
 body {
     font-family: "Roboto", sans-serif;
     height: 100vh;
+    background-color: var(--cream);
+}
+
+#content {
+    padding: 20px;
+}
+
+.box {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
 }

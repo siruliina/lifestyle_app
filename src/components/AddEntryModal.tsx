@@ -99,10 +99,13 @@ const AddEntryModal: React.FC<AddEntryModalProps> = ({
                         <button
                             type="button"
                             onClick={() => setModalOpen(false)}
+                            className="pink-button"
                         >
                             Cancel
                         </button>
-                        <button type="submit">Save</button>
+                        <button type="submit" className="green-button">
+                            Save
+                        </button>
                     </div>
                 </form>
             </div>

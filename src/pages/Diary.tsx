@@ -50,7 +50,11 @@ const Diary = () => {
     return (
         <div>
             <h1>Diary</h1>
-            <button type="button" onClick={() => setModalOpen(true)}>
+            <button
+                type="button"
+                onClick={() => setModalOpen(true)}
+                className="green-button"
+            >
                 New Entry
             </button>
             {modalOpen ? (
@@ -62,13 +66,14 @@ const Diary = () => {
             <div>
                 {entries.length > 0 ? (
                     entries.map((entry) => (
-                        <div key={entry.id}>
+                        <div key={entry.id} className="box">
                             <h2>{entry.title}</h2>
                             <p>{entry.created_at}</p>
                             <p>{entry.body}</p>
                             <button
                                 type="button"
                                 onClick={() => handleDeleteEntry(entry.id)}
+                                className="pink-button"
                             >
                                 Delete Entry
                             </button>

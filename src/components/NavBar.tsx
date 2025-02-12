@@ -37,9 +37,14 @@ const NavBar = () => {
                 <li>
                     <Link to="/profile">Profile</Link>
                 </li>
-                <li onClick={handleLogout}>
-                    <Link to="/login">Logout</Link>
-                </li>
+
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="pink-button"
+                >
+                    Logout
+                </button>
             </ul>
         </div>
     );

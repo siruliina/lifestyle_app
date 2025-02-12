@@ -17,16 +17,17 @@ function App() {
     return (
         <div>
             {auth.isAuthenticated ? <NavBar /> : null}
-
-            <Routes>
-                <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/" element={<FrontPage />} />
-                <Route path="/diary" element={<Diary />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/calendar" element={<Calendar />} />
-                <Route path="*" element={<Missing />} />
-            </Routes>
+            <div id="content">
+                <Routes>
+                    <Route path="/sign-up" element={<SignUp />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/" element={<FrontPage />} />
+                    <Route path="/diary" element={<Diary />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/calendar" element={<Calendar />} />
+                    <Route path="*" element={<Missing />} />
+                </Routes>
+            </div>
         </div>
     );
 }
