@@ -1,26 +1,16 @@
 import { Link } from "react-router-dom";
 import "../css/components/NavBar.css";
-import axios from "axios";
-import { baseUrl } from "../utils/baseUrl";
 import useAuth from "../hooks/useAuth";
+import useAxios from "../hooks/useAxios";
 
 const NavBar = () => {
-    const { auth, setAuth } = useAuth();
+    const { setAuth } = useAuth();
+    const axiosInstance = useAxios();
 
     const handleLogout = () => {
-        axios
-            .post(
-                `${baseUrl}/users/logout/`,
-                {},
-                {
-                    headers: {
-                        Authorization: "Bearer " + auth.accessToken,
-                    },
-                    withCredentials: true,
-                }
-            )
-            .then((response) => {
-                console.log(response.data);
+        axiosInstance
+            .post(`/users/logout/`, {})
+            .then(() => {
                 setAuth({
                     userId: null,
                     accessToken: null,
@@ -41,7 +31,9 @@ const NavBar = () => {
                 <li>
                     <Link to="/diary">Diary</Link>
                 </li>
-                <li>Calendar</li>
+                <li>
+                    <Link to="/calendar">Calendar</Link>
+                </li>
                 <li>
                     <Link to="/profile">Profile</Link>
                 </li>

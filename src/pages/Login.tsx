@@ -55,13 +55,9 @@ const Login = () => {
 
                 if (
                     accountError &&
-                    accountError.includes(
-                        "No active account found with the given credentials"
-                    )
+                    accountError.includes("Invalid username or password")
                 ) {
-                    setMessage(
-                        "No active account found with the given credentials."
-                    );
+                    setMessage("Invalid username or password.");
                 }
             });
     };

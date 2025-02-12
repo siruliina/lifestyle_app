@@ -32,8 +32,7 @@ const SignUp = () => {
 
         axios
             .post(`${baseUrl}/users/register/`, userToCreate)
-            .then((response) => {
-                console.log(response.data);
+            .then(() => {
                 setMessage({
                     text: "User created successfully. Redirecting to login page in 3 seconds.",
                     error: false,
@@ -45,7 +44,23 @@ const SignUp = () => {
             })
             .catch((error) => {
                 console.error(error.response);
-                setMessage({ text: "Signup failed. Try again.", error: true });
+                const usernameError = error.response.data.username;
+
+                if (
+                    usernameError.includes(
+                        "A user with that username already exists."
+                    )
+                ) {
+                    setMessage({
+                        text: "A user with that username already exists.",
+                        error: true,
+                    });
+                } else {
+                    setMessage({
+                        text: "Signup failed. Try again.",
+                        error: true,
+                    });
+                }
             });
     };
 

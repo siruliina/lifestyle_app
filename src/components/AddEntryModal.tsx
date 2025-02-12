@@ -1,7 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
-import axios from "axios";
-import { baseUrl } from "../utils/baseUrl";
+import useAxios from "../hooks/useAxios";
 
 type AddEntryModalProps = {
     setModalOpen: (modalOpen: boolean) => void;
@@ -23,29 +22,20 @@ const AddEntryModal: React.FC<AddEntryModalProps> = ({
         handleSubmit,
     } = useForm<AddEntryFormData>({ mode: "onChange" });
     const { auth } = useAuth();
+    const axiosInstance = useAxios();
 
     const handleAddEntry: SubmitHandler<AddEntryFormData> = (data) => {
-        console.log("Form sent.", data);
-
         const entry = {
             title: data.title,
             body: data.body,
             author: auth.userId,
         };
 
-        axios
-            .post(`${baseUrl}/entries/`, entry, {
-                headers: { Authorization: "Bearer " + auth.accessToken },
-                withCredentials: true,
-            })
+        axiosInstance
+            .post(`/entries/`, entry)
             .then(() => {
-                axios
-                    .get(`${baseUrl}/entries/`, {
-                        headers: {
-                            Authorization: "Bearer " + auth.accessToken,
-                        },
-                        withCredentials: true,
-                    })
+                axiosInstance
+                    .get(`/entries/?author=${auth.userId}`)
                     .then((response) => {
                         setEntries(response.data);
                     })

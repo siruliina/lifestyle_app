@@ -1,8 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { baseUrl } from "../utils/baseUrl";
 import useAuth from "../hooks/useAuth";
 import AddEntryModal from "../components/AddEntryModal";
+import useAxios from "../hooks/useAxios";
 
 type Entry = {
     id: number;
@@ -15,16 +14,14 @@ const Diary = () => {
     const { auth, loading } = useAuth();
     const [entries, setEntries] = useState<Entry[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const axiosInstance = useAxios();
 
     useEffect(() => {
         if (loading) {
             return;
         } else {
-            axios
-                .get(`${baseUrl}/entries/`, {
-                    headers: { Authorization: "Bearer " + auth.accessToken },
-                    withCredentials: true,
-                })
+            axiosInstance
+                .get(`/entries/?author=${auth.userId}`)
                 .then((response) => {
                     setEntries(response.data);
                 })
@@ -33,6 +30,22 @@ const Diary = () => {
                 });
         }
     }, [loading, auth]);
+
+    const handleDeleteEntry = (id: number) => {
+        axiosInstance.delete(`/entries/${id}/`).then(() => {
+            axiosInstance
+                .get(`/entries/?author=${auth.userId}`)
+                .then((response) => {
+                    setEntries(response.data);
+                })
+                .catch((error) => {
+                    console.error(
+                        "Error while fetching entries: ",
+                        error.response
+                    );
+                });
+        });
+    };
 
     return (
         <div>
@@ -53,6 +66,12 @@ const Diary = () => {
                             <h2>{entry.title}</h2>
                             <p>{entry.created_at}</p>
                             <p>{entry.body}</p>
+                            <button
+                                type="button"
+                                onClick={() => handleDeleteEntry(entry.id)}
+                            >
+                                Delete Entry
+                            </button>
                         </div>
                     ))
                 ) : (
