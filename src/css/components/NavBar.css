@@ -1,0 +1,11 @@
+#navbar-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+#navbar-wrapper ul {
+    display: flex;
+    list-style-type: none;
+    gap: 40px;
+}

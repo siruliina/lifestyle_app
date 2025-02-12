@@ -33,8 +33,6 @@ const Login = () => {
                 withCredentials: true,
             })
             .then((response) => {
-                console.log(response.data);
-
                 try {
                     setAuth({
                         userId: response.data.user_id,
@@ -48,7 +46,7 @@ const Login = () => {
                 }
             })
             .then(() => {
-                // navigate("/")
+                navigate("/");
             })
             .catch((error) => {
                 console.error(error.response);
