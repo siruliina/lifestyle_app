@@ -4,7 +4,10 @@ import AddEntryModal from "../components/AddEntryModal";
 import useAxios from "../hooks/useAxios";
 import Select, { SingleValue } from "react-select";
 import { Option, EntryFilters, Entry } from "../utils/types";
-import "../css/general/forms.css";
+import "../css/pages/Diary.css";
+import { IoIosMore } from "react-icons/io";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const order_options = [
     {
@@ -38,6 +41,7 @@ const Diary = () => {
         order: "-created_at",
         date: "",
         search: "",
+        favorite: "",
     });
 
     const fetchEntries = () => {
@@ -46,6 +50,7 @@ const Diary = () => {
             ordering: filters.order,
             search: filters.search,
             author: auth.userId,
+            favorite: filters.favorite,
         };
 
         axiosInstance
@@ -90,20 +95,27 @@ const Diary = () => {
         }));
     };
 
+    // Function for handling the favorite filter changes
+    const handleFavoriteFilter = () => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            favorite: filters.favorite === true ? "" : !filters.favorite,
+        }));
+    };
+
+    // Function that handles the favoriting of an entry
+    const handleFavoriteEntry = (entryId: number) => {
+        axiosInstance
+            .post(`/entries/${entryId}/toggle_favorite/`, {})
+            .then(() => {
+                fetchEntries();
+            });
+    };
+
     // Function to handle deletion of an entry when clicking "Delete Entry" button
     const handleDeleteEntry = (id: number) => {
         axiosInstance.delete(`/entries/${id}/`).then(() => {
-            axiosInstance
-                .get(`/entries/?author=${auth.userId}`)
-                .then((response) => {
-                    setEntries(response.data);
-                })
-                .catch((error) => {
-                    console.error(
-                        "Error while fetching entries: ",
-                        error.response
-                    );
-                });
+            fetchEntries();
         });
     };
 
@@ -145,15 +157,68 @@ const Diary = () => {
                     placeholder="Search by title"
                     className="filter"
                 />
+                {filters.favorite ? (
+                    <FaHeart
+                        className="heart"
+                        onClick={() => handleFavoriteFilter()}
+                        style={{ color: "var(--pink)" }}
+                    />
+                ) : (
+                    <FaRegHeart
+                        className="heart"
+                        onClick={() => handleFavoriteFilter()}
+                    />
+                )}
             </form>
 
             <div className="spaced-vertical-flex">
                 {entries.length > 0 ? (
                     entries.map((entry) => (
                         <div key={entry.id} className="box">
-                            <h2>{entry.title}</h2>
+                            <div className="title-more-row">
+                                <h2>{entry.title}</h2>
+                                <div className="icons-flex">
+                                    {entry.favorite ? (
+                                        <FaHeart
+                                            className="heart"
+                                            onClick={() =>
+                                                handleFavoriteEntry(entry.id)
+                                            }
+                                            style={{ color: "var(--pink)" }}
+                                        />
+                                    ) : (
+                                        <FaRegHeart
+                                            className="heart"
+                                            onClick={() =>
+                                                handleFavoriteEntry(entry.id)
+                                            }
+                                        />
+                                    )}
+
+                                    <Dropdown>
+                                        <Dropdown.Toggle id="dropdown-basic">
+                                            <IoIosMore />
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item href="#/action-1">
+                                                Action
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/action-2">
+                                                Action
+                                            </Dropdown.Item>
+                                            <Dropdown.Item href="#/action-3">
+                                                Action
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </div>
+                            </div>
                             <p>{entry.created_at}</p>
-                            <p>{entry.body}</p>
+                            <p>
+                                {entry.body.substring(0, 300)}
+                                {entry.body.length > 300 ? "..." : null}
+                            </p>
                             <button
                                 type="button"
                                 onClick={() => handleDeleteEntry(entry.id)}

@@ -8,6 +8,7 @@ export type EntryFilters = {
     order?: string;
     date?: string;
     search?: string;
+    favorite: boolean | string;
 };
 
 export type Entry = {
@@ -15,4 +16,5 @@ export type Entry = {
     title: string;
     body: string;
     created_at: string;
+    favorite: boolean;
 };

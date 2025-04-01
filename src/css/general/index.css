@@ -18,20 +18,11 @@
     --lightest-green: #f2ffe9;
     --light-green: #a6cf98;
     --dark-green: #557c55;
+    --light-grey: #f3f3f3;
 }
 
 body {
     font-family: "Roboto", sans-serif;
     height: 100vh;
     background-color: var(--cream);
-}
-
-#content {
-    padding: 20px;
-}
-
-.box {
-    background-color: white;
-    border-radius: var(--border-radius);
-    padding: 20px;
 }

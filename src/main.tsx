@@ -7,6 +7,7 @@ import "./css/general/buttons.css";
 import "./css/general/forms.css";
 import "./css/general/modals.css";
 import "./css/general/layouts.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";

@@ -27,6 +27,16 @@ button {
     background-color: #3e5a3e;
 }
 
+.icon-button {
+    background: none;
+    width: fit-content;
+    height: fit-content;
+}
+
+.icon-button:hover {
+    background-color: var(--light-grey);
+}
+
 /* Button positioning */
 .buttons {
     display: flex;

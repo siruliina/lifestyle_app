@@ -1,0 +1,15 @@
+.title-more-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.icons-flex {
+    display: flex;
+    gap: var(--flex-gap);
+    align-items: center;
+}
+
+.heart:hover {
+    color: var(--pink);
+}
