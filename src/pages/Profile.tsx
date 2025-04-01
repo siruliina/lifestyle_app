@@ -59,7 +59,11 @@ const Profile = () => {
             <h1>Profile</h1>
             <p>{user?.username}</p>
             <p>{user?.email}</p>
-            <button type="button" onClick={handleDeleteUser}>
+            <button
+                type="button"
+                onClick={handleDeleteUser}
+                className="pink-button"
+            >
                 Delete Account
             </button>
         </div>

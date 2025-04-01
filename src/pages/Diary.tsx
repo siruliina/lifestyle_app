@@ -2,35 +2,95 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import AddEntryModal from "../components/AddEntryModal";
 import useAxios from "../hooks/useAxios";
+import Select, { SingleValue } from "react-select";
+import { Option, EntryFilters, Entry } from "../utils/types";
+import "../css/general/forms.css";
 
-type Entry = {
-    id: number;
-    title: string;
-    body: string;
-    created_at: string;
-};
+const order_options = [
+    {
+        label: "Newest to oldest",
+        value: "-created_at",
+        name: "order",
+    },
+    {
+        label: "Oldest to newest",
+        value: "created_at",
+        name: "order",
+    },
+    {
+        label: "Title A-Z",
+        value: "title",
+        name: "order",
+    },
+    {
+        label: "Title Z-A",
+        value: "-title",
+        name: "order",
+    },
+];
 
 const Diary = () => {
     const { auth, loading } = useAuth();
     const [entries, setEntries] = useState<Entry[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const axiosInstance = useAxios();
+    const [filters, setFilters] = useState<EntryFilters>({
+        order: "",
+        date: "",
+        search: "",
+    });
+
+    const fetchEntries = () => {
+        const params = {
+            created_at: filters.date,
+            ordering: filters.order,
+            search: filters.search,
+            author: auth.userId,
+        };
+
+        axiosInstance
+            .get(`/entries/`, { params })
+            .then((response) => {
+                setEntries(response.data);
+            })
+            .catch((error) => {
+                console.error(error.response);
+            });
+    };
 
     useEffect(() => {
         if (loading) {
             return;
         } else {
-            axiosInstance
-                .get(`/entries/?author=${auth.userId}`)
-                .then((response) => {
-                    setEntries(response.data);
-                })
-                .catch((error) => {
-                    console.error(error.response);
-                });
+            fetchEntries();
         }
-    }, [loading, auth]);
+    }, [loading, auth, filters]);
 
+    // Function for handling the order select element's changes
+    const handleSelectChange = (selectedOption: SingleValue<Option>) => {
+        if (selectedOption) {
+            // Extracting name and value of option
+            const { name, value } = selectedOption;
+
+            setFilters((prevFilters) => ({
+                ...prevFilters,
+                [name]: value,
+            }));
+        }
+    };
+
+    // Function for handling the search and date input field changes
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Extracting name and value of event
+        const { name, value } = e.target;
+
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value,
+        }));
+    };
+
+    // Function to handle deletion of an entry when clicking "Delete Entry" button
     const handleDeleteEntry = (id: number) => {
         axiosInstance.delete(`/entries/${id}/`).then(() => {
             axiosInstance
@@ -63,6 +123,32 @@ const Diary = () => {
                     setEntries={setEntries}
                 />
             ) : null}
+
+            <div>
+                <form className="filters-wrapper">
+                    <Select
+                        name="order"
+                        options={order_options}
+                        onChange={handleSelectChange}
+                        placeholder="Order"
+                        className="filter"
+                    />
+                    <input
+                        type="date"
+                        name="date"
+                        onChange={handleInputChange}
+                        className="filter"
+                    />
+                    <input
+                        type="text"
+                        name="search"
+                        onChange={handleInputChange}
+                        placeholder="Search by title"
+                        className="filter"
+                    />
+                </form>
+            </div>
+
             <div>
                 {entries.length > 0 ? (
                     entries.map((entry) => (
