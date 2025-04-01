@@ -35,7 +35,7 @@ const Diary = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const axiosInstance = useAxios();
     const [filters, setFilters] = useState<EntryFilters>({
-        order: "",
+        order: "-created_at",
         date: "",
         search: "",
     });
@@ -108,7 +108,7 @@ const Diary = () => {
     };
 
     return (
-        <div>
+        <div className="spaced-vertical-flex">
             <h1>Diary</h1>
             <button
                 type="button"
@@ -124,32 +124,30 @@ const Diary = () => {
                 />
             ) : null}
 
-            <div>
-                <form className="filters-wrapper">
-                    <Select
-                        name="order"
-                        options={order_options}
-                        onChange={handleSelectChange}
-                        placeholder="Order"
-                        className="filter"
-                    />
-                    <input
-                        type="date"
-                        name="date"
-                        onChange={handleInputChange}
-                        className="filter"
-                    />
-                    <input
-                        type="text"
-                        name="search"
-                        onChange={handleInputChange}
-                        placeholder="Search by title"
-                        className="filter"
-                    />
-                </form>
-            </div>
+            <form className="filters-wrapper">
+                <Select
+                    name="order"
+                    options={order_options}
+                    onChange={handleSelectChange}
+                    placeholder="Order"
+                    className="filter"
+                />
+                <input
+                    type="date"
+                    name="date"
+                    onChange={handleInputChange}
+                    className="filter"
+                />
+                <input
+                    type="text"
+                    name="search"
+                    onChange={handleInputChange}
+                    placeholder="Search by title"
+                    className="filter"
+                />
+            </form>
 
-            <div>
+            <div className="spaced-vertical-flex">
                 {entries.length > 0 ? (
                     entries.map((entry) => (
                         <div key={entry.id} className="box">

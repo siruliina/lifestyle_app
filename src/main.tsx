@@ -6,6 +6,7 @@ import "./css/general/index.css";
 import "./css/general/buttons.css";
 import "./css/general/forms.css";
 import "./css/general/modals.css";
+import "./css/general/layouts.css";
 
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
