@@ -51,6 +51,8 @@ const EntryModal: React.FC<EntryModalProps> = ({
                 .put(`/entries/${initialEntry.id}/`, updatedEntry)
                 .then(() => {
                     fetchEntries();
+                    setInitialEntry(null);
+                    setModalOpen(false);
                 })
                 .catch((error) => {
                     console.error(
@@ -64,8 +66,6 @@ const EntryModal: React.FC<EntryModalProps> = ({
                 .post(`/entries/`, updatedEntry)
                 .then(() => {
                     fetchEntries();
-                })
-                .then(() => {
                     setModalOpen(false);
                 })
                 .catch((error) => {
@@ -75,8 +75,6 @@ const EntryModal: React.FC<EntryModalProps> = ({
                     );
                 });
         }
-
-        setInitialEntry(null);
     };
 
     return (
