@@ -2,22 +2,5 @@
     display: flex;
     justify-content: center;
     padding: 20px;
-    background-color: var(--light-green);
-}
-
-#navbar-wrapper ul {
-    display: flex;
-    list-style-type: none;
-    gap: 40px;
-    align-items: center;
-}
-
-#navbar-wrapper ul li a {
-    text-decoration: none;
-    color: var(--dark-green);
-    font-weight: var(--thick-font);
-}
-
-#navbar-wrapper ul li a:hover {
-    color: #3e5a3e;
+    background-color: var(--light-green) !important;
 }

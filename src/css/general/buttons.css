@@ -10,31 +10,35 @@ button {
 }
 
 .pink-button {
-    background-color: var(--pink);
-    color: white;
+    background-color: var(--pink) !important;
+    color: white !important;
+    border: none !important;
 }
 
 .pink-button:hover {
-    background-color: #bd6086;
+    background-color: #bd6086 !important;
 }
 
 .green-button {
-    background-color: var(--dark-green);
-    color: white;
+    background-color: var(--dark-green) !important;
+    color: white !important;
+    border: none !important;
 }
 
 .green-button:hover {
-    background-color: #3e5a3e;
+    background-color: #3e5a3e !important;
 }
 
 .icon-button {
-    background: none;
-    width: fit-content;
-    height: fit-content;
+    background: none !important;
+    width: fit-content !important;
+    height: fit-content !important;
+    color: black !important;
+    border: none !important;
 }
 
 .icon-button:hover {
-    background-color: var(--light-grey);
+    background-color: var(--light-grey) !important;
 }
 
 /* Button positioning */

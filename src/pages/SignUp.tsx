@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../utils/baseUrl";
 import { useState } from "react";
+import { Button, Form } from "react-bootstrap";
 
 interface SignUpFormData {
     username: string;
@@ -67,10 +68,10 @@ const SignUp = () => {
     return (
         <div>
             <h1>Sign Up</h1>
-            <form className="form-flex" onSubmit={handleSubmit(handleSignUp)}>
-                <div>
-                    <label htmlFor="username">Username</label>
-                    <input
+            <Form onSubmit={handleSubmit(handleSignUp)}>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="username">Username</Form.Label>
+                    <Form.Control
                         type="text"
                         id="username"
                         style={
@@ -87,11 +88,11 @@ const SignUp = () => {
                             {errors.username.message}
                         </p>
                     )}
-                </div>
+                </Form.Group>
 
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="email">Email</Form.Label>
+                    <Form.Control
                         type="text"
                         id="email"
                         style={
@@ -110,11 +111,11 @@ const SignUp = () => {
                     {errors.email && (
                         <p className="error-message">{errors.email.message}</p>
                     )}
-                </div>
+                </Form.Group>
 
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="password">Password</Form.Label>
+                    <Form.Control
                         type="password"
                         id="password"
                         style={
@@ -131,11 +132,13 @@ const SignUp = () => {
                             {errors.password.message}
                         </p>
                     )}
-                </div>
+                </Form.Group>
 
-                <div>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                    <input
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="confirmPassword">
+                        Confirm Password
+                    </Form.Label>
+                    <Form.Control
                         type="password"
                         id="confirmPassword"
                         style={
@@ -161,7 +164,7 @@ const SignUp = () => {
                             {errors.confirmPassword.message}
                         </p>
                     )}
-                </div>
+                </Form.Group>
 
                 {message.text.length > 0 ? (
                     <p
@@ -174,12 +177,18 @@ const SignUp = () => {
                 ) : null}
 
                 <div className="buttons">
-                    <button type="button" onClick={() => navigate("/login")}>
+                    <Button
+                        type="button"
+                        onClick={() => navigate("/login")}
+                        className="pink-button"
+                    >
                         Cancel
-                    </button>
-                    <button type="submit">Sign Up</button>
+                    </Button>
+                    <Button type="submit" className="green-button">
+                        Sign Up
+                    </Button>
                 </div>
-            </form>
+            </Form>
         </div>
     );
 };

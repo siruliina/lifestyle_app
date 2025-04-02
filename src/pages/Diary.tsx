@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
-import AddEntryModal from "../components/AddEntryModal";
 import useAxios from "../hooks/useAxios";
 import Select, { SingleValue } from "react-select";
 import { Option, EntryFilters, Entry } from "../utils/types";
 import "../css/pages/Diary.css";
-import { IoIosMore } from "react-icons/io";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
+import { Card, Form } from "react-bootstrap";
+import EntryModal from "../components/EntryModal";
 
 const order_options = [
     {
@@ -43,6 +44,7 @@ const Diary = () => {
         search: "",
         favorite: "",
     });
+    const [initialEntry, setInitialEntry] = useState<Entry | null>(null);
 
     const fetchEntries = () => {
         const params = {
@@ -122,21 +124,24 @@ const Diary = () => {
     return (
         <div className="spaced-vertical-flex">
             <h1>Diary</h1>
-            <button
+            <Button
                 type="button"
                 onClick={() => setModalOpen(true)}
                 className="green-button"
             >
                 New Entry
-            </button>
+            </Button>
             {modalOpen ? (
-                <AddEntryModal
+                <EntryModal
+                    modalOpen={modalOpen}
                     setModalOpen={setModalOpen}
-                    setEntries={setEntries}
+                    fetchEntries={fetchEntries}
+                    initialEntry={initialEntry ? initialEntry : undefined}
+                    setInitialEntry={setInitialEntry}
                 />
             ) : null}
 
-            <form className="filters-wrapper">
+            <Form className="filters-wrapper">
                 <Select
                     name="order"
                     options={order_options}
@@ -144,13 +149,13 @@ const Diary = () => {
                     placeholder="Order"
                     className="filter"
                 />
-                <input
+                <Form.Control
                     type="date"
                     name="date"
                     onChange={handleInputChange}
                     className="filter"
                 />
-                <input
+                <Form.Control
                     type="text"
                     name="search"
                     onChange={handleInputChange}
@@ -169,64 +174,76 @@ const Diary = () => {
                         onClick={() => handleFavoriteFilter()}
                     />
                 )}
-            </form>
+            </Form>
 
             <div className="spaced-vertical-flex">
                 {entries.length > 0 ? (
                     entries.map((entry) => (
-                        <div key={entry.id} className="box">
-                            <div className="title-more-row">
-                                <h2>{entry.title}</h2>
-                                <div className="icons-flex">
-                                    {entry.favorite ? (
-                                        <FaHeart
-                                            className="heart"
-                                            onClick={() =>
-                                                handleFavoriteEntry(entry.id)
-                                            }
-                                            style={{ color: "var(--pink)" }}
-                                        />
-                                    ) : (
-                                        <FaRegHeart
-                                            className="heart"
-                                            onClick={() =>
-                                                handleFavoriteEntry(entry.id)
-                                            }
-                                        />
-                                    )}
+                        <Card key={entry.id} className="box">
+                            <Card.Body>
+                                <div className="title-more-row">
+                                    <Card.Title>{entry.title}</Card.Title>
+                                    <div className="icons-flex">
+                                        {entry.favorite ? (
+                                            <FaHeart
+                                                className="heart"
+                                                onClick={() =>
+                                                    handleFavoriteEntry(
+                                                        entry.id
+                                                    )
+                                                }
+                                                style={{ color: "var(--pink)" }}
+                                            />
+                                        ) : (
+                                            <FaRegHeart
+                                                className="heart"
+                                                onClick={() =>
+                                                    handleFavoriteEntry(
+                                                        entry.id
+                                                    )
+                                                }
+                                            />
+                                        )}
 
-                                    <Dropdown>
-                                        <Dropdown.Toggle id="dropdown-basic">
-                                            <IoIosMore />
-                                        </Dropdown.Toggle>
+                                        <Dropdown>
+                                            <Dropdown.Toggle
+                                                id="dropdown-basic"
+                                                className="icon-button"
+                                            >
+                                                More
+                                            </Dropdown.Toggle>
 
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item href="#/action-1">
-                                                Action
-                                            </Dropdown.Item>
-                                            <Dropdown.Item href="#/action-2">
-                                                Action
-                                            </Dropdown.Item>
-                                            <Dropdown.Item href="#/action-3">
-                                                Action
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item
+                                                    onClick={() => {
+                                                        setInitialEntry(entry);
+                                                        setModalOpen(true);
+                                                    }}
+                                                >
+                                                    Edit
+                                                </Dropdown.Item>
+                                                <Dropdown.Item
+                                                    onClick={() =>
+                                                        handleDeleteEntry(
+                                                            entry.id
+                                                        )
+                                                    }
+                                                >
+                                                    Delete
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </div>
                                 </div>
-                            </div>
-                            <p>{entry.created_at}</p>
-                            <p>
-                                {entry.body.substring(0, 300)}
-                                {entry.body.length > 300 ? "..." : null}
-                            </p>
-                            <button
-                                type="button"
-                                onClick={() => handleDeleteEntry(entry.id)}
-                                className="pink-button"
-                            >
-                                Delete Entry
-                            </button>
-                        </div>
+                                <Card.Text>
+                                    {entry.created_at}
+                                    <br />
+
+                                    {entry.body.substring(0, 300)}
+                                    {entry.body.length > 300 ? "..." : null}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
                     ))
                 ) : (
                     <p>No entries yet.</p>

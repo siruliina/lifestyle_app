@@ -3,6 +3,8 @@ import "../css/components/NavBar.css";
 import useAuth from "../hooks/useAuth";
 import useAxios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import { Nav, Navbar } from "react-bootstrap";
 
 const NavBar = () => {
     const { setAuth, setLoading } = useAuth();
@@ -29,30 +31,36 @@ const NavBar = () => {
     };
 
     return (
-        <div id="navbar-wrapper">
-            <ul>
-                <li>
-                    <Link to="/">Home</Link>
-                </li>
-                <li>
-                    <Link to="/diary">Diary</Link>
-                </li>
-                <li>
-                    <Link to="/calendar">Calendar</Link>
-                </li>
-                <li>
-                    <Link to="/profile">Profile</Link>
-                </li>
+        <Navbar
+            sticky="top"
+            bg="light"
+            data-bs-theme="light"
+            expand="lg"
+            id="navbar-wrapper"
+        >
+            <Nav>
+                <Nav.Link as={Link} to="/">
+                    Home
+                </Nav.Link>
+                <Nav.Link as={Link} to="/diary">
+                    Diary
+                </Nav.Link>
+                <Nav.Link as={Link} to="/calendar">
+                    Calendar
+                </Nav.Link>
+                <Nav.Link as={Link} to="/profile">
+                    Profile
+                </Nav.Link>
 
-                <button
+                <Button
                     type="button"
                     onClick={handleLogout}
                     className="pink-button"
                 >
                     Logout
-                </button>
-            </ul>
-        </div>
+                </Button>
+            </Nav>
+        </Navbar>
     );
 };
 

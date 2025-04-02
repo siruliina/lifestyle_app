@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../utils/baseUrl";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
+import { Button, Form } from "react-bootstrap";
 
 interface LoginFormData {
     username: string;
@@ -65,10 +66,10 @@ const Login = () => {
     return (
         <div>
             <h1>Login</h1>
-            <form className="form-flex" onSubmit={handleSubmit(handleLogin)}>
-                <div>
-                    <label htmlFor="username">Username</label>
-                    <input
+            <Form onSubmit={handleSubmit(handleLogin)}>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="username">Username</Form.Label>
+                    <Form.Control
                         type="text"
                         id="username"
                         style={
@@ -85,11 +86,11 @@ const Login = () => {
                             {errors.username.message}
                         </p>
                     )}
-                </div>
+                </Form.Group>
 
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="password">Password</Form.Label>
+                    <Form.Control
                         type="password"
                         id="password"
                         style={
@@ -106,25 +107,25 @@ const Login = () => {
                             {errors.password.message}
                         </p>
                     )}
-                </div>
+                </Form.Group>
 
                 {message.length > 0 ? (
                     <p className="error-message">{message}</p>
                 ) : null}
 
                 <div className="buttons">
-                    <button
+                    <Button
                         type="button"
                         onClick={() => navigate("/sign-up")}
                         className="pink-button"
                     >
                         Sign Up
-                    </button>
-                    <button type="submit" className="green-button">
+                    </Button>
+                    <Button type="submit" className="green-button">
                         Login
-                    </button>
+                    </Button>
                 </div>
-            </form>
+            </Form>
         </div>
     );
 };
