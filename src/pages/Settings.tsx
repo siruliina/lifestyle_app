@@ -10,17 +10,35 @@ type EditUserFormData = {
     email: string;
 };
 
+type ChangePasswordFormData = {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+};
+
 const Settings = () => {
     const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        setValue,
+        register: registerEdit,
+        handleSubmit: handleSubmitEdit,
+        formState: { errors: errorsEdit },
+        setValue: setValueEdit,
     } = useForm<EditUserFormData>({ mode: "onChange" });
+
+    const {
+        register: registerPassword,
+        handleSubmit: handleSubmitPassword,
+        formState: { errors: errorsPassword },
+        getValues,
+        setValue: setValuePassword,
+    } = useForm<ChangePasswordFormData>({ mode: "onChange" });
 
     const axiosInstance = useAxios();
     const { auth, setAuth, loading, setLoading } = useAuth();
     const [editUserMessage, setEditUserMessage] = useState({
+        error: false,
+        message: "",
+    });
+    const [changePasswordMessage, setChangePasswordMessage] = useState({
         error: false,
         message: "",
     });
@@ -35,8 +53,8 @@ const Settings = () => {
         axiosInstance
             .get(`/users/${auth.userId}/`)
             .then((response) => {
-                setValue("username", response.data.username);
-                setValue("email", response.data.email);
+                setValueEdit("username", response.data.username);
+                setValueEdit("email", response.data.email);
             })
             .catch((error) => {
                 console.error(
@@ -132,32 +150,85 @@ const Settings = () => {
             });
     };
 
+    const handleChangePassword: SubmitHandler<ChangePasswordFormData> = (
+        data
+    ) => {
+        const updatedPassword = {
+            old_password: data.oldPassword,
+            new_password: data.newPassword,
+        };
+
+        axiosInstance
+            .post("/users/change-password/", updatedPassword)
+            .then(() => {
+                setChangePasswordMessage({
+                    message: "Changing password was successful!",
+                    error: false,
+                });
+
+                setTimeout(() => {
+                    setChangePasswordMessage({
+                        message: "",
+                        error: false,
+                    });
+
+                    setValuePassword("oldPassword", "");
+                    setValuePassword("newPassword", "");
+                    setValuePassword("confirmPassword", "");
+                }, 3000);
+            })
+            .catch((error) => {
+                console.error("Changing password failed:", error.response);
+
+                const oldPasswordError = error.response.data.detail;
+
+                if (oldPasswordError?.includes("Old password is incorrect.")) {
+                    setChangePasswordMessage({
+                        message: "Old password was incorrect. Try again.",
+                        error: true,
+                    });
+                } else {
+                    setChangePasswordMessage({
+                        message: "Something went wrong. Try again.",
+                        error: true,
+                    });
+                }
+
+                setTimeout(() => {
+                    setChangePasswordMessage({
+                        message: "",
+                        error: false,
+                    });
+                }, 3000);
+            });
+    };
+
     return (
         <div className="spaced-vertical-flex">
             <h1>Settings</h1>
             <Card>
                 <Card.Body>
                     <Card.Title>Edit Account</Card.Title>
-                    <Form onSubmit={handleSubmit(handleEditUser)}>
+                    <Form onSubmit={handleSubmitEdit(handleEditUser)}>
                         <Form.Group className="mb-3">
                             <Form.Label htmlFor="username">Username</Form.Label>
                             <Form.Control
                                 type="text"
                                 id="username"
                                 style={
-                                    errors.username
+                                    errorsEdit.username
                                         ? {
                                               border: "1px solid var(--error-color)",
                                           }
                                         : undefined
                                 }
-                                {...register("username", {
+                                {...registerEdit("username", {
                                     required: "Please, type your username.",
                                 })}
                             />
-                            {errors.username && (
+                            {errorsEdit.username && (
                                 <p className="error-message">
-                                    {errors.username.message}
+                                    {errorsEdit.username.message}
                                 </p>
                             )}
                         </Form.Group>
@@ -167,13 +238,13 @@ const Settings = () => {
                                 type="text"
                                 id="email"
                                 style={
-                                    errors.email
+                                    errorsEdit.email
                                         ? {
                                               border: "1px solid var(--error-color)",
                                           }
                                         : undefined
                                 }
-                                {...register("email", {
+                                {...registerEdit("email", {
                                     required: "Please, type your email.",
                                     pattern: {
                                         value: /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim,
@@ -181,9 +252,9 @@ const Settings = () => {
                                     },
                                 })}
                             />
-                            {errors.email && (
+                            {errorsEdit.email && (
                                 <p className="error-message">
-                                    {errors.email.message}
+                                    {errorsEdit.email.message}
                                 </p>
                             )}
                         </Form.Group>
@@ -197,6 +268,124 @@ const Settings = () => {
                                 }
                             >
                                 {editUserMessage.message}
+                            </p>
+                        ) : null}
+
+                        <Card.Footer className="buttons card-footer">
+                            <Button type="submit" className="green-button">
+                                Save
+                            </Button>
+                        </Card.Footer>
+                    </Form>
+                </Card.Body>
+            </Card>
+
+            <Card>
+                <Card.Body>
+                    <Card.Title>Change Password</Card.Title>
+                    <Form onSubmit={handleSubmitPassword(handleChangePassword)}>
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="oldPassword">
+                                Old Password
+                            </Form.Label>
+                            <Form.Control
+                                type="password"
+                                id="oldPassword"
+                                style={
+                                    errorsPassword.oldPassword
+                                        ? {
+                                              border: "1px solid var(--error-color)",
+                                          }
+                                        : undefined
+                                }
+                                {...registerPassword("oldPassword", {
+                                    required: "Please, type your old password.",
+                                })}
+                            />
+                            {errorsPassword.oldPassword && (
+                                <p className="error-message">
+                                    {errorsPassword.oldPassword.message}
+                                </p>
+                            )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="newPassword">
+                                New Password
+                            </Form.Label>
+                            <Form.Control
+                                type="password"
+                                id="newPassword"
+                                style={
+                                    errorsPassword.newPassword
+                                        ? {
+                                              border: "1px solid var(--error-color)",
+                                          }
+                                        : undefined
+                                }
+                                {...registerPassword("newPassword", {
+                                    required: "Please, type a new password.",
+                                    validate: {
+                                        match: (v) => {
+                                            const { oldPassword } = getValues();
+                                            return (
+                                                v !== oldPassword ||
+                                                "The new password has to differ from the old password."
+                                            );
+                                        },
+                                    },
+                                })}
+                            />
+                            {errorsPassword.newPassword && (
+                                <p className="error-message">
+                                    {errorsPassword.newPassword.message}
+                                </p>
+                            )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="confirmPassword">
+                                Confirm New Password
+                            </Form.Label>
+                            <Form.Control
+                                type="password"
+                                id="confirmPassword"
+                                style={
+                                    errorsPassword.confirmPassword
+                                        ? {
+                                              border: "1px solid var(--error-color)",
+                                          }
+                                        : undefined
+                                }
+                                {...registerPassword("confirmPassword", {
+                                    required: "Please, confirm your password.",
+                                    validate: {
+                                        match: (v) => {
+                                            const { newPassword } = getValues();
+                                            return (
+                                                v === newPassword ||
+                                                "The passwords don't match. Check again."
+                                            );
+                                        },
+                                    },
+                                })}
+                            />
+                            {errorsPassword.confirmPassword && (
+                                <p className="error-message">
+                                    {errorsPassword.confirmPassword.message}
+                                </p>
+                            )}
+                        </Form.Group>
+
+                        {changePasswordMessage.message.length > 0 ? (
+                            <p
+                                className={
+                                    changePasswordMessage.error
+                                        ? "error-message"
+                                        : "success-message"
+                                }
+                            >
+                                {changePasswordMessage.message}
                             </p>
                         ) : null}
 
