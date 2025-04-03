@@ -81,8 +81,8 @@ const EntryModal: React.FC<EntryModalProps> = ({
         <Modal
             show={modalOpen}
             onHide={() => {
-                setModalOpen(false);
                 setInitialEntry(null);
+                setModalOpen(false);
             }}
         >
             <Modal.Header closeButton>
@@ -90,8 +90,8 @@ const EntryModal: React.FC<EntryModalProps> = ({
                     {initialEntry ? "Edit diary entry" : "Add Diary Entry"}
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <Form onSubmit={handleSubmit(handleAddEditEntry)}>
+            <Form onSubmit={handleSubmit(handleAddEditEntry)}>
+                <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="title">Title</Form.Label>
                         <Form.Control
@@ -125,17 +125,17 @@ const EntryModal: React.FC<EntryModalProps> = ({
                             </p>
                         )}
                     </Form.Group>
+                </Modal.Body>
 
-                    <Modal.Footer
-                        className="buttons"
-                        style={{ padding: "1rem 0 0 0" }}
-                    >
-                        <Button type="submit" className="green-button">
-                            Save
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal.Body>
+                <Modal.Footer
+                    className="buttons"
+                    style={{ padding: "1rem 0 0 0" }}
+                >
+                    <Button type="submit" className="green-button">
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Form>
         </Modal>
     );
 };

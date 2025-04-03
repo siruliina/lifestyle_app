@@ -1,4 +1,4 @@
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card, Form, Modal } from "react-bootstrap";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
@@ -16,7 +16,7 @@ const Settings = () => {
         handleSubmit,
         formState: { errors },
         setValue,
-    } = useForm<EditUserFormData>({ mode: "onChange", defaultValues: {} });
+    } = useForm<EditUserFormData>({ mode: "onChange" });
 
     const axiosInstance = useAxios();
     const { auth, setAuth, loading, setLoading } = useAuth();
@@ -25,6 +25,7 @@ const Settings = () => {
         message: "",
     });
     const navigate = useNavigate();
+    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (loading) {
@@ -123,6 +124,7 @@ const Settings = () => {
                     accessToken: null,
                     isAuthenticated: false,
                 });
+                setDeleteModalOpen(false);
                 navigate("/login");
             })
             .catch((error) => {
@@ -217,7 +219,7 @@ const Settings = () => {
                     <Card.Footer className="buttons card-footer">
                         <Button
                             type="button"
-                            onClick={handleDeleteUser}
+                            onClick={() => setDeleteModalOpen(true)}
                             className="pink-button"
                         >
                             Delete
@@ -225,6 +227,36 @@ const Settings = () => {
                     </Card.Footer>
                 </Card.Body>
             </Card>
+
+            <Modal
+                show={deleteModalOpen}
+                onHide={() => {
+                    setDeleteModalOpen(false);
+                }}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete account?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to delete your account?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        type="button"
+                        onClick={() => setDeleteModalOpen(false)}
+                        className="pink-button"
+                    >
+                        No
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={() => handleDeleteUser()}
+                        className="green-button"
+                    >
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
