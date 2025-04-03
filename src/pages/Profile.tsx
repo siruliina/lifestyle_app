@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../hooks/useAxios";
+import { Button } from "react-bootstrap";
 
 type User = {
     username: string;
@@ -59,13 +60,13 @@ const Profile = () => {
             <h1>Profile</h1>
             <p>{user?.username}</p>
             <p>{user?.email}</p>
-            <button
+            <Button
                 type="button"
                 onClick={handleDeleteUser}
                 className="pink-button"
             >
                 Delete Account
-            </button>
+            </Button>
         </div>
     );
 };
