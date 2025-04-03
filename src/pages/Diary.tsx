@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxios from "../hooks/useAxios";
 import Select, { SingleValue } from "react-select";
-import { Option, EntryFilters, Entry } from "../utils/types";
+import { Option, EntryFilters, Entry as EntryType } from "../utils/types";
 import "../css/pages/Diary.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
-import { Card, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import EntryModal from "../components/EntryModal";
+import Entry from "../components/Entry";
 
 const order_options = [
     {
@@ -35,7 +35,7 @@ const order_options = [
 
 const Diary = () => {
     const { auth, loading } = useAuth();
-    const [entries, setEntries] = useState<Entry[]>([]);
+    const [entries, setEntries] = useState<EntryType[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const axiosInstance = useAxios();
     const [filters, setFilters] = useState<EntryFilters>({
@@ -44,7 +44,7 @@ const Diary = () => {
         search: "",
         favorite: "",
     });
-    const [initialEntry, setInitialEntry] = useState<Entry | null>(null);
+    const [initialEntry, setInitialEntry] = useState<EntryType | null>(null);
 
     const fetchEntries = () => {
         const params = {
@@ -105,22 +105,6 @@ const Diary = () => {
         }));
     };
 
-    // Function that handles the favoriting of an entry
-    const handleFavoriteEntry = (entryId: number) => {
-        axiosInstance
-            .post(`/entries/${entryId}/toggle_favorite/`, {})
-            .then(() => {
-                fetchEntries();
-            });
-    };
-
-    // Function to handle deletion of an entry when clicking "Delete Entry" button
-    const handleDeleteEntry = (id: number) => {
-        axiosInstance.delete(`/entries/${id}/`).then(() => {
-            fetchEntries();
-        });
-    };
-
     return (
         <div className="spaced-vertical-flex">
             <h1>Diary</h1>
@@ -179,71 +163,13 @@ const Diary = () => {
             <div className="spaced-vertical-flex">
                 {entries.length > 0 ? (
                     entries.map((entry) => (
-                        <Card key={entry.id} className="box">
-                            <Card.Body>
-                                <div className="title-more-row">
-                                    <Card.Title>{entry.title}</Card.Title>
-                                    <div className="icons-flex">
-                                        {entry.favorite ? (
-                                            <FaHeart
-                                                className="heart"
-                                                onClick={() =>
-                                                    handleFavoriteEntry(
-                                                        entry.id
-                                                    )
-                                                }
-                                                style={{ color: "var(--pink)" }}
-                                            />
-                                        ) : (
-                                            <FaRegHeart
-                                                className="heart"
-                                                onClick={() =>
-                                                    handleFavoriteEntry(
-                                                        entry.id
-                                                    )
-                                                }
-                                            />
-                                        )}
-
-                                        <Dropdown>
-                                            <Dropdown.Toggle
-                                                id="dropdown-basic"
-                                                className="icon-button"
-                                            >
-                                                More
-                                            </Dropdown.Toggle>
-
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item
-                                                    onClick={() => {
-                                                        setInitialEntry(entry);
-                                                        setModalOpen(true);
-                                                    }}
-                                                >
-                                                    Edit
-                                                </Dropdown.Item>
-                                                <Dropdown.Item
-                                                    onClick={() =>
-                                                        handleDeleteEntry(
-                                                            entry.id
-                                                        )
-                                                    }
-                                                >
-                                                    Delete
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </div>
-                                </div>
-                                <Card.Text>
-                                    {entry.created_at}
-                                    <br />
-
-                                    {entry.body.substring(0, 300)}
-                                    {entry.body.length > 300 ? "..." : null}
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
+                        <Entry
+                            key={entry.id}
+                            entry={entry}
+                            fetchEntries={fetchEntries}
+                            setInitialEntry={setInitialEntry}
+                            setModalOpen={setModalOpen}
+                        />
                     ))
                 ) : (
                     <p>No entries yet.</p>

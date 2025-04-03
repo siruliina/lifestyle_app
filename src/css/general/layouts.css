@@ -8,11 +8,9 @@
     gap: var(--flex-gap);
 }
 
-.box {
-    background-color: white;
-    border-radius: var(--border-radius);
-    padding: 20px;
+.title-more-row {
     display: flex;
-    flex-direction: column;
-    gap: var(--flex-gap);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
