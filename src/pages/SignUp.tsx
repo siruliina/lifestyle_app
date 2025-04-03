@@ -44,16 +44,29 @@ const SignUp = () => {
                 }, 3000);
             })
             .catch((error) => {
-                console.error(error.response);
+                console.error(
+                    "Error occurred while signing up:",
+                    error.response
+                );
                 const usernameError = error.response.data.username;
+                const emailError = error.response.data.email;
 
                 if (
-                    usernameError.includes(
+                    usernameError?.includes(
                         "A user with that username already exists."
                     )
                 ) {
                     setMessage({
                         text: "A user with that username already exists.",
+                        error: true,
+                    });
+                } else if (
+                    emailError?.includes(
+                        "user with this email address already exists."
+                    )
+                ) {
+                    setMessage({
+                        text: "A user with that email already exists.",
                         error: true,
                     });
                 } else {
@@ -62,6 +75,10 @@ const SignUp = () => {
                         error: true,
                     });
                 }
+
+                setTimeout(() => {
+                    setMessage({ text: "", error: false });
+                }, 3000);
             });
     };
 

@@ -126,7 +126,10 @@ const EntryModal: React.FC<EntryModalProps> = ({
                         )}
                     </Form.Group>
 
-                    <Modal.Footer className="buttons">
+                    <Modal.Footer
+                        className="buttons"
+                        style={{ padding: "1rem 0 0 0" }}
+                    >
                         <Button type="submit" className="green-button">
                             Save
                         </Button>

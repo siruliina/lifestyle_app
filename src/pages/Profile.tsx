@@ -11,7 +11,7 @@ type User = {
 };
 
 const Profile = () => {
-    const { auth, setAuth, loading, setLoading } = useAuth();
+    const { auth, loading } = useAuth();
     const [user, setUser] = useState<User>();
     const navigate = useNavigate();
     const axiosInstance = useAxios();
@@ -32,35 +32,14 @@ const Profile = () => {
         }
     }, [loading, auth]);
 
-    const handleDeleteUser = () => {
-        axiosInstance
-            .post(`/users/logout/`, {})
-            .then(() => {
-                setLoading(true);
-                axiosInstance
-                    .delete(`/users/${auth.userId}/`)
-                    .catch((error) => {
-                        console.error(error.response);
-                    });
-            })
-            .then(() => {
-                setAuth({
-                    userId: null,
-                    accessToken: null,
-                    isAuthenticated: false,
-                });
-                navigate("/login");
-            })
-            .catch((error) => {
-                console.error(error.response);
-            });
-    };
-
     return (
         <div>
             <div className="title-more-row">
                 <h1>Profile</h1>
-                <Button className="icon-button">
+                <Button
+                    className="icon-button"
+                    onClick={() => navigate("/settings")}
+                >
                     <GoGear size="1.2em" />
                 </Button>
             </div>
@@ -68,13 +47,6 @@ const Profile = () => {
                 <Card.Body>
                     <p>{user?.username}</p>
                     <p>{user?.email}</p>
-                    <Button
-                        type="button"
-                        onClick={handleDeleteUser}
-                        className="pink-button"
-                    >
-                        Delete Account
-                    </Button>
                 </Card.Body>
             </Card>
         </div>

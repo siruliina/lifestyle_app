@@ -10,6 +10,7 @@ import Diary from "./pages/Diary";
 import FrontPage from "./pages/FrontPage";
 import Profile from "./pages/Profile";
 import Calendar from "./pages/Calendar";
+import Settings from "./pages/Settings";
 
 function App() {
     const { auth } = useAuth();
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/diary" element={<Diary />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/calendar" element={<Calendar />} />
+                    <Route path="/settings" element={<Settings />} />
                     <Route path="*" element={<Missing />} />
                 </Routes>
             </div>

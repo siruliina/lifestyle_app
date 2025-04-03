@@ -18,3 +18,10 @@ export type Entry = {
     created_at: string;
     favorite: boolean;
 };
+
+export type User = {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+};
