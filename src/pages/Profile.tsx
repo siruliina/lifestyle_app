@@ -45,7 +45,9 @@ const Profile = () => {
             </div>
             <Card>
                 <Card.Body>
+                    <Card.Title>Username</Card.Title>
                     <p>{user?.username}</p>
+                    <Card.Title>Email</Card.Title>
                     <p>{user?.email}</p>
                 </Card.Body>
             </Card>

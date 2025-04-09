@@ -11,6 +11,7 @@ import FrontPage from "./pages/FrontPage";
 import Profile from "./pages/Profile";
 import Calendar from "./pages/Calendar";
 import Settings from "./pages/Settings";
+import Checklists from "./pages/Checklists";
 
 function App() {
     const { auth } = useAuth();
@@ -24,8 +25,9 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={<FrontPage />} />
                     <Route path="/diary" element={<Diary />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/checklists" element={<Checklists />} />
                     <Route path="/calendar" element={<Calendar />} />
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="*" element={<Missing />} />
                 </Routes>
