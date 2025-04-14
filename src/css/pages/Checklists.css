@@ -1,0 +1,16 @@
+.checklists-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--flex-gap);
+}
+
+.checkbox-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.checklist-card {
+    display: flex;
+    min-height: 200px;
+}

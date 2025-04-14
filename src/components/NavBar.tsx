@@ -45,6 +45,9 @@ const NavBar = () => {
                 <Nav.Link as={Link} to="/diary">
                     Diary
                 </Nav.Link>
+                <Nav.Link as={Link} to="/checklists">
+                    Checklists
+                </Nav.Link>
                 <Nav.Link as={Link} to="/calendar">
                     Calendar
                 </Nav.Link>

@@ -25,3 +25,16 @@ export type User = {
     email: string;
     password: string;
 };
+
+export type ChecklistItem = {
+    id: number;
+    title: string;
+    finished: boolean;
+};
+
+export type Checklist = {
+    id: number;
+    title: string;
+    description: string;
+    checklist_items: ChecklistItem[];
+};
