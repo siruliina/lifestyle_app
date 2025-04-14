@@ -26,7 +26,7 @@ const Checklist: React.FC<ChecklistProps> = ({
 }) => {
     const [editOpen, setEditOpen] = useState<boolean>(false);
     const [addedItems, setAddedItems] = useState<ChecklistItemToAdd[]>(
-        checklist?.checklist_items || []
+        checklist?.checklist_items || [{ title: "", finished: false }]
     );
     const {
         register,
@@ -88,6 +88,20 @@ const Checklist: React.FC<ChecklistProps> = ({
         ]);
     };
 
+    const deleteChecklist = () => {
+        axiosInstance
+            .delete(`/checklists/${checklist?.id}/`)
+            .then(() => {
+                fetchChecklists();
+            })
+            .catch((error) => {
+                console.error(
+                    "Error occured while deleting a checklist:",
+                    error.response
+                );
+            });
+    };
+
     const handleCreateEditChecklist: SubmitHandler<CreateChecklistFormData> = (
         data
     ) => {
@@ -101,9 +115,10 @@ const Checklist: React.FC<ChecklistProps> = ({
         if (!checklist) {
             axiosInstance
                 .post("/checklists/", newChecklist)
-                .then((response) => {
-                    console.log(response.data);
+                .then(() => {
                     reset();
+                    setAddedItems([{ title: "", finished: false }]);
+                    fetchChecklists();
                 })
                 .catch((error) => {
                     console.error(
@@ -114,8 +129,8 @@ const Checklist: React.FC<ChecklistProps> = ({
         } else {
             axiosInstance
                 .patch(`/checklists/${checklist.id}/`, newChecklist)
-                .then((response) => {
-                    console.log(response.data);
+                .then(() => {
+                    fetchChecklists();
                     setEditOpen(false);
                 })
                 .catch((error) => {
@@ -161,38 +176,28 @@ const Checklist: React.FC<ChecklistProps> = ({
                             )}
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            {checklist ? (
-                                addedItems.map((item, index) => {
-                                    return (
-                                        <div
-                                            className="checkbox-row"
-                                            key={index}
-                                        >
-                                            <Form.Check
-                                                checked={item.finished}
-                                                onChange={() =>
-                                                    handleChecklistToggle(index)
-                                                }
-                                            />
-                                            <Form.Control
-                                                type="text"
-                                                value={item.title}
-                                                onChange={(e) =>
-                                                    handleChecklistChange(
-                                                        e.target.value,
-                                                        index
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                    );
-                                })
-                            ) : (
-                                <div className="checkbox-row">
-                                    <Form.Check />
-                                    <Form.Control type="text" />
-                                </div>
-                            )}
+                            {addedItems.map((item, index) => {
+                                return (
+                                    <div className="checkbox-row" key={index}>
+                                        <Form.Check
+                                            checked={item.finished}
+                                            onChange={() =>
+                                                handleChecklistToggle(index)
+                                            }
+                                        />
+                                        <Form.Control
+                                            type="text"
+                                            value={item.title}
+                                            onChange={(e) =>
+                                                handleChecklistChange(
+                                                    e.target.value,
+                                                    index
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                );
+                            })}
                         </Form.Group>
                         <Button type="button" onClick={addChecklistItem}>
                             +
@@ -233,6 +238,9 @@ const Checklist: React.FC<ChecklistProps> = ({
                         )}
                         <Button type="button" onClick={() => setEditOpen(true)}>
                             Edit
+                        </Button>
+                        <Button type="button" onClick={deleteChecklist}>
+                            Delete
                         </Button>
                     </Card.Body>
                 )
