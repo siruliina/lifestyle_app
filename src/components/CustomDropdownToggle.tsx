@@ -1,6 +1,6 @@
 import React from "react";
 import { IoIosMore } from "react-icons/io";
-import "../css/components/CustomDropdownToggle.css";
+import { Button } from "react-bootstrap";
 
 type CustomToggleProps = {
     children?: React.ReactNode;
@@ -20,9 +20,9 @@ export const CustomToggle = React.forwardRef<
         }}
     >
         {/* Render custom icon here */}
-        <div className="toggle-button">
+        <Button className="icon-button">
             <IoIosMore size="1.2rem" />
-        </div>
+        </Button>
 
         {children}
     </a>

@@ -161,6 +161,7 @@ const Checklist: React.FC<ChecklistProps> = ({
                 <Card.Body>
                     <Form onSubmit={handleSubmit(handleCreateEditChecklist)}>
                         <Form.Group className="mb-3">
+                            <Form.Label>Title</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Add title"
@@ -174,7 +175,8 @@ const Checklist: React.FC<ChecklistProps> = ({
                                 </p>
                             )}
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Description</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Add description"
@@ -189,6 +191,7 @@ const Checklist: React.FC<ChecklistProps> = ({
                             )}
                         </Form.Group>
                         <Form.Group className="mb-3">
+                            <Form.Label>Items</Form.Label>
                             {addedItems.map((item, index) => {
                                 return (
                                     <div className="checkbox-row" key={index}>
@@ -212,16 +215,24 @@ const Checklist: React.FC<ChecklistProps> = ({
                                 );
                             })}
                         </Form.Group>
-                        <Button type="button" onClick={addChecklistItem}>
-                            +
-                        </Button>
-                        {checklist && (
-                            <Button type="button" onClick={cancelSubmit}>
-                                Cancel
+                        <div className="buttons">
+                            <Button
+                                type="button"
+                                onClick={addChecklistItem}
+                                className="add-item-button"
+                            >
+                                +
                             </Button>
-                        )}
+                        </div>
 
-                        <Button type="submit">Save</Button>
+                        <div className="buttons-center">
+                            {checklist && (
+                                <Button type="button" onClick={cancelSubmit}>
+                                    Cancel
+                                </Button>
+                            )}
+                            <Button type="submit">Save</Button>
+                        </div>
                     </Form>
                 </Card.Body>
             ) : (

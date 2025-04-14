@@ -48,3 +48,10 @@ button {
     gap: var(--flex-gap);
     justify-content: flex-end;
 }
+
+.buttons-center {
+    display: flex;
+    flex-direction: row !important;
+    gap: var(--flex-gap);
+    justify-content: center;
+}

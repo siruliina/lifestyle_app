@@ -14,3 +14,8 @@
     display: flex;
     min-height: 200px;
 }
+
+.add-item-button {
+    width: fit-content;
+    height: fit-content;
+}
