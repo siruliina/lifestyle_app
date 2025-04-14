@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card, Dropdown, Form } from "react-bootstrap";
 import { Checklist as ChecklistType } from "../utils/types";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
+import { CustomToggle } from "./CustomDropdownToggle";
 
 type ChecklistProps = {
     checklist?: ChecklistType;
@@ -52,6 +53,7 @@ const Checklist: React.FC<ChecklistProps> = ({
         );
     };
 
+    // Function that gets called when user toggles the checklists' checkboxes without opening the edit form
     const handleEditItemStatus = (index: number) => {
         const updatedChecklist = {
             checklist_items: addedItems.map((item, i) =>
@@ -73,6 +75,7 @@ const Checklist: React.FC<ChecklistProps> = ({
             });
     };
 
+    // Function that handles the changing of a checklist item's name
     const handleChecklistChange = (newTitle: string, index: number) => {
         setAddedItems(
             addedItems.map((item, i) =>
@@ -81,6 +84,7 @@ const Checklist: React.FC<ChecklistProps> = ({
         );
     };
 
+    // Function that adds a new empty item in the checklist
     const addChecklistItem = () => {
         setAddedItems((prevItems) => [
             ...prevItems,
@@ -88,6 +92,7 @@ const Checklist: React.FC<ChecklistProps> = ({
         ]);
     };
 
+    // Function that gets called when user presses "Delete" button that deletes a checklist
     const deleteChecklist = () => {
         axiosInstance
             .delete(`/checklists/${checklist?.id}/`)
@@ -102,13 +107,21 @@ const Checklist: React.FC<ChecklistProps> = ({
             });
     };
 
+    const cancelSubmit = () => {
+        reset();
+        setAddedItems(addedItems.filter((item) => item.title.length > 0));
+        setEditOpen(false);
+    };
+
+    // Function that gets called when user submits the form
+    // Both editing and creating new
     const handleCreateEditChecklist: SubmitHandler<CreateChecklistFormData> = (
         data
     ) => {
         const newChecklist = {
             title: data.checklistTitle,
             description: data.checklistDescription,
-            checklist_items: addedItems,
+            checklist_items: addedItems.filter((item) => item.title.length > 0),
             author: auth.userId,
         };
 
@@ -203,10 +216,7 @@ const Checklist: React.FC<ChecklistProps> = ({
                             +
                         </Button>
                         {checklist && (
-                            <Button
-                                type="button"
-                                onClick={() => setEditOpen(false)}
-                            >
+                            <Button type="button" onClick={cancelSubmit}>
                                 Cancel
                             </Button>
                         )}
@@ -217,7 +227,33 @@ const Checklist: React.FC<ChecklistProps> = ({
             ) : (
                 checklist && (
                     <Card.Body>
-                        <Card.Title>{checklist.title}</Card.Title>
+                        <div>
+                            <div className="title-more-row">
+                                <Card.Title>{checklist.title}</Card.Title>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        as={CustomToggle}
+                                        id="dropdown-basic"
+                                        className="icon-button"
+                                    ></Dropdown.Toggle>
+
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item
+                                            onClick={() => setEditOpen(true)}
+                                        >
+                                            Edit
+                                        </Dropdown.Item>
+                                        <Dropdown.Item
+                                            onClick={deleteChecklist}
+                                        >
+                                            Delete
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </div>{" "}
+                            <p>{checklist.description}</p>
+                        </div>
+
                         {checklist.checklist_items.length > 0 ? (
                             checklist.checklist_items.map((item, index) => {
                                 return (
@@ -236,12 +272,6 @@ const Checklist: React.FC<ChecklistProps> = ({
                         ) : (
                             <p>No items yet.</p>
                         )}
-                        <Button type="button" onClick={() => setEditOpen(true)}>
-                            Edit
-                        </Button>
-                        <Button type="button" onClick={deleteChecklist}>
-                            Delete
-                        </Button>
                     </Card.Body>
                 )
             )}

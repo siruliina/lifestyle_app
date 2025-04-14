@@ -1,0 +1,10 @@
+.toggle-button {
+    color: black;
+    padding: 0.375rem;
+    border-radius: 0.375rem;
+    height: min-content;
+}
+
+.toggle-button:hover {
+    background-color: var(--light-grey);
+}
